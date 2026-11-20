@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   devIndicators: false,
+  // The render route reads fonts/ at runtime: ship it with the serverless function.
+  outputFileTracingIncludes: { "/api/render": ["./fonts/**"] },
   // Hyper Elements renders PDFs and images on Node: keep their engines out of the bundle.
   serverExternalPackages: ["@react-pdf/renderer", "@resvg/resvg-js", "satori"],
   turbopack: {
