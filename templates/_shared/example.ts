@@ -1,0 +1,101 @@
+// The sample report: two real Lighthouse 13.6.0 runs of a Wikipedia article (mobile and desktop, 19 Nov 2026,
+// public/samples/), written up by "Tidewater Studio", a made-up web studio. Plan and summary are the studio's words.
+const example = {
+  "site": "https://en.wikipedia.org/wiki/Web_performance",
+    "agency": "Tidewater Studio",
+  "reportDate": "2026-11-19",
+  "accent": "#2453FF",
+  "summary": "The article is already fast: it scores 95 on phones and 91 on desktop, and its main content appears in 1.3 seconds on a phone. Two things hold it back on phones. The layout jumps once while loading (a shift of 0.11, just over Google's 0.1 limit), and the page takes 3.9 seconds to fill in. Fixing the jump and the slow first response from the server are the changes worth making first.",
+  "runs": [
+    {
+      "label": "Mobile",
+      "formFactor": "mobile",
+      "fetchedAt": "2026-11-18",
+      "lighthouse": "13.6.0",
+      "performance": 95,
+      "accessibility": 95,
+      "bestPractices": 77,
+      "seo": 92,
+      "lcp": 1346.2902,
+      "cls": 0.1101887615757193,
+      "tbt": 34.5,
+      "fcp": 1346.2902,
+      "si": 3863.933397117709
+    },
+    {
+      "label": "Desktop",
+      "formFactor": "desktop",
+      "fetchedAt": "2026-11-18",
+      "lighthouse": "13.6.0",
+      "performance": 91,
+      "accessibility": 97,
+      "bestPractices": 77,
+      "seo": 92,
+      "lcp": 1192.8036999999995,
+      "cls": 0.07188411688353938,
+      "tbt": 0,
+      "fcp": 1192.8036999999995,
+      "si": 1940.17418230223
+    }
+  ],
+  "findings": [
+    {
+      "headline": "Things move around while the page loads",
+      "why": "Content jumping makes people tap the wrong thing. Reserving space for images, ads and embeds stops it.",
+      "detail": "Avoid large layout shifts: 1 layout shift found",
+      "impact": "high",
+      "who": "developer"
+    },
+    {
+      "headline": "The server is slow to start answering",
+      "why": "Nothing can appear until the page's first byte arrives. Faster hosting, caching or a CDN brings everything forward.",
+      "detail": "Document request latency: Est savings of 520 ms",
+      "impact": "high",
+      "who": "hosting"
+    },
+    {
+      "headline": "Returning visitors download files again",
+      "why": "Longer cache lifetimes let repeat visits load from the visitor's own device.",
+      "detail": "Use efficient cache lifetimes: Est savings of 50 KiB",
+      "impact": "medium",
+      "who": "hosting"
+    },
+    {
+      "headline": "Files hold up the first paint",
+      "why": "Some stylesheets or scripts must finish downloading before anything shows. Loading them later, or inline, lets the page appear sooner.",
+      "detail": "Render-blocking requests: Est savings of 110 ms",
+      "impact": "medium",
+      "who": "developer"
+    },
+    {
+      "headline": "Files load one after another",
+      "why": "Requests that wait on other requests form chains. Shorter chains, or preconnecting early, start the page sooner.",
+      "detail": "Network dependency tree",
+      "impact": "medium",
+      "who": "developer"
+    }
+  ],
+  "plan": [
+    {
+      "task": "Reserve space for the element that shifts on load (set its width and height)",
+      "owner": "Front-end",
+      "effort": "hours"
+    },
+    {
+      "task": "Put the HTML behind a CDN cache to cut the 0.6 s wait for the first byte",
+      "owner": "Hosting",
+      "effort": "days"
+    },
+    {
+      "task": "Inline the critical CSS and defer the rest",
+      "owner": "Front-end",
+      "effort": "days"
+    },
+    {
+      "task": "Raise cache lifetimes on static files",
+      "owner": "Hosting",
+      "effort": "hours"
+    }
+  ]
+};
+export default example;
