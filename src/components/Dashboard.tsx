@@ -1,5 +1,6 @@
 "use client";
 
+import { renderLocal } from "@/lib/render-local";
 import NextLink from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AlertTriangle, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, Download01, FileCheck02, Image01, Mail01, Plus, RefreshCw01, Trash01, Upload01, XClose } from "@untitledui/icons";
@@ -408,7 +409,7 @@ function SendStep({ ready, report }: { ready: boolean; report: ReturnType<typeof
     let alive = true;
     const t = setTimeout(async () => {
       setBusy(true);
-      const res = await fetch("/api/render", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ output: out, report }) });
+      const res = await renderLocal({ method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ output: out, report }) });
       const type = res.headers.get("Content-Type") ?? "";
       const next = type.includes("json")
         ? await res.json().then((j) => (res.ok ? { html: j.html as string } : { issues: (j.diagnostics ?? [{ message: j.error }]).map((d: { message: string; path?: string }) => `${d.path ? `${d.path.replace(/^values\./, "")}: ` : ""}${d.message}`) }))
@@ -429,7 +430,7 @@ function SendStep({ ready, report }: { ready: boolean; report: ReturnType<typeof
 
   async function download(which: Out) {
     if (!report) return;
-    const res = await fetch("/api/render", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ output: which, report }) });
+    const res = await renderLocal({ method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ output: which, report }) });
     if (!res.ok) return;
     const slug = host(report.site).replace(/[^a-z0-9]+/gi, "-").toLowerCase().slice(0, 60);
     const a = document.createElement("a");
