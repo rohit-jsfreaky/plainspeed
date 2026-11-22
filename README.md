@@ -6,6 +6,8 @@ send: a client report (PDF), a summary email, and a results card (PNG).
 
 Built with [Hyper Elements](https://github.com/hyper-elements/hyper-elements) for the Hyper Elements Template Challenge.
 
+**Live:** https://plainspeed.rohitkashyapmrt.workers.dev
+
 ![Step 1: two real Lighthouse runs of a Wikipedia article, every metric rated against Google's bands](media/runs.png)
 
 ## Why this exists
@@ -66,8 +68,8 @@ says so.
 
 ## How Hyper Elements is used
 
-The three outputs are **Hyper Elements templates** in `templates/`. The app renders them in a route handler
-(`src/app/api/render/route.ts`), and the CLI renders the same files.
+The three outputs are **Hyper Elements templates** in `templates/`. The app renders them in the browser
+(`src/lib/render-route.ts`, so the site runs on Cloudflare with no render server), and the CLI renders the same files.
 
 - **Typed fields with rules** (`templates/_shared/report.tsx`). Scores are whole numbers from 0 to 100, metrics are
   non-negative numbers, the site must be an `http(s)` URL, there are 1 or 2 runs, at most 10 findings and 10 tasks, and
@@ -100,7 +102,7 @@ npm test               # the Lighthouse reader, the bands, the draft (8 tests on
 npm run check          # check the three templates with their example
 npm run reports        # reports/wikipedia-web-performance.json → out/reports/ (PDF, email, card)
 npm run preview:email  # the email as Outlook, Gmail and Apple Mail show it
-npm run build && npm start
+npm run build && npx wrangler dev   # the static site, served the way Cloudflare does
 ```
 
 ## Project layout
